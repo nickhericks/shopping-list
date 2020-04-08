@@ -20,15 +20,18 @@ function handleSubmit(e) {
 	};
 
 	items.push(item);
-	console.log(`There are not ${items.length} items in your cart.`);
 
 	// clear the form
 	e.target.reset();
-	displayItems();
+
+	// we don't want to tightly couple displayItems function with handleSubmit function because we will also need to update the listed events on the page when someone completes and event or deletes an event. Instead of running displayItems in each of those functions, we will instead create our own custom event, then listen for that custom event.
+	// displayItems();
+
+	// fire off a custom event that will tell anyone else who cares that the items have been updated.
+	list.dispatchEvent(new CustomEvent('itemsUpdated'));
 }
 
 function displayItems() {
-  console.log(items);
   const html = items
     .map(
       (item) => `<li class="shopping-item">
@@ -41,7 +44,13 @@ function displayItems() {
 
 
   list.innerHTML = html;
-  console.log(list);
+}
+
+function mirrorToLocalStorage() {
+	console.log('saving items to localstorage');
+	localStorage.setItem('items', JSON.stringify(items));
 }
 
 shoppingForm.addEventListener('submit', handleSubmit);
+list.addEventListener('itemsUpdated', displayItems);
+list.addEventListener('itemsUpdated', mirrorToLocalStorage);
