@@ -7,9 +7,29 @@ const items = [];
 
 function handleSubmit(e) {
 	e.preventDefault();
-	console.log(e.target.item.value);
 	const name = e.target.item.value;
 	
+	const item = {
+		name,
+		id: Date.now(),
+		complete: false
+	};
+
+	items.push(item);
+	console.log(`There are not ${items.length} items in your cart.`);
+
+	// clear the form
+	e.target.reset();
+	displayItems();
+}
+
+function displayItems() {
+	console.log(items);
+	const html = items.map( item => `<li>${item.name}</li>` ).join('');
+
+	list.innerHTML = html;
+console.log(list);
+
 }
 
 
