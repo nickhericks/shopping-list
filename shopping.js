@@ -30,9 +30,9 @@ function displayItems() {
     .map(
       (item) => `<li class="shopping-item">
 				<input type="checkbox" value={item.complete} >
-				${item.name}
-				
-				</li>`
+				<span class="name">${item.name}</span>
+				<button aria-label="Remove ${item.name}">&times;</button>
+			</li>`
     )
     .join("");
 
