@@ -4,6 +4,7 @@ const list = document.querySelector('.list');
 // an array to hold our state
 const items = [];
 
+// prettier-ignore
 
 function handleSubmit(e) {
 	e.preventDefault();
@@ -24,16 +25,20 @@ function handleSubmit(e) {
 }
 
 function displayItems() {
-	console.log(items);
-	const html = items.map( item => `<li class="shopping-item">
-		${item.name}
-		
-	</li>` ).join('');
+  console.log(items);
+  const html = items
+    .map(
+      (item) => `<li class="shopping-item">
+				<input type="checkbox" value={item.complete} >
+				${item.name}
+				
+				</li>`
+    )
+    .join("");
 
-	list.innerHTML = html;
-	console.log(list);
 
+  list.innerHTML = html;
+  console.log(list);
 }
-
 
 shoppingForm.addEventListener('submit', handleSubmit);
