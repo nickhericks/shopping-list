@@ -2,3 +2,5 @@ shopping-DEMO.js
 shopping-FINISHED.js
 dist
 .cache
+node_modules/
+package.json

@@ -25,10 +25,13 @@ function handleSubmit(e) {
 
 function displayItems() {
 	console.log(items);
-	const html = items.map( item => `<li>${item.name}</li>` ).join('');
+	const html = items.map( item => `<li class="shopping-item">
+		${item.name}
+		
+	</li>` ).join('');
 
 	list.innerHTML = html;
-console.log(list);
+	console.log(list);
 
 }
 
