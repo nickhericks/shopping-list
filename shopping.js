@@ -10,6 +10,9 @@ function handleSubmit(e) {
 	e.preventDefault();
 	const name = e.target.item.value;
 	
+	// if it's empty, don't do anything
+	if(!name) return;
+
 	const item = {
 		name,
 		id: Date.now(),
