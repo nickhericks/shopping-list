@@ -1,3 +1,12 @@
+
+// This is how all the frameworks work.
+// You have some state. 
+// Write a bunch of handlers to update, modify state.
+// When that state changes, rerender the html on page.
+
+// One security issue here for now is that we need to clean data before we let the user submit it so that they can't submit crazy code in the input box. Refer to wesbos security video for that tutorial.
+
+
 const shoppingForm = document.querySelector('form');
 const list = document.querySelector('.list');
 
@@ -33,9 +42,16 @@ function displayItems() {
   const html = items
     .map(
       item => `<li class="shopping-item">
-				<input type="checkbox" value={item.complete} >
-				<span class="name">${item.name}</span>
-				<button value=${item.id} aria-label="Remove ${item.name}">&times;</button>
+        <input 
+          value=${item.id} 
+          type="checkbox"
+          ${item.complete ? 'checked' : ''}
+        >
+				<span class="itemName">${item.name}</span>
+        <button 
+          aria-label="Remove ${item.name}"
+          value="${item.id} "
+        >&times;</button>
 			</li>`
     )
     .join('');
@@ -61,20 +77,32 @@ function restoreFromLocalStorage() {
 
 function deleteItem(id) {
   // update items array without this one
-  const newItems = items.filter(item => item.id !== id);
-  items = newItems;
+  items = items.filter(item => item.id !== id);
+  list.dispatchEvent(new CustomEvent('itemsUpdated'));
+}
+
+function markAsComplete(id) {
+  const itemRef = items.find(item => item.id === id);
+  console.log(itemRef);
+  // since we don't know if we should be changing it from true to false or false to true we can use ! to set it to the opposite of whichever it currently is.
+  itemRef.complete = !itemRef.complete;
   list.dispatchEvent(new CustomEvent('itemsUpdated'));
 }
 
 shoppingForm.addEventListener('submit', handleSubmit);
+
+// we've attached both of these functions to our custom event
 list.addEventListener('itemsUpdated', displayItems);
 list.addEventListener('itemsUpdated', mirrorToLocalStorage);
 
 // event delegation: we listen for the click on the list <ul> but then delegate the click over to the button if that is what is clicked
 list.addEventListener('click', function(e) {
-  // console.log(e.target);
+  const id = parseInt(e.target.value);
   if(e.target.matches('button')) {
-    deleteItem(parseInt(e.target.value));
+    deleteItem(id);
+  }
+  if(e.target.matches('input[type="checkbox"]')) {
+    markAsComplete(id);
   }
 });
 
