@@ -2,7 +2,7 @@ const shoppingForm = document.querySelector('form');
 const list = document.querySelector('.list');
 
 // an array to hold our state
-const items = [];
+let items = [];
 
 // prettier-ignore
 
@@ -18,7 +18,7 @@ function handleSubmit(e) {
 		id: Date.now(),
 		complete: false
 	};
-
+	console.log(items);
 	items.push(item);
 
 	// clear the form
@@ -51,6 +51,22 @@ function mirrorToLocalStorage() {
 	localStorage.setItem('items', JSON.stringify(items));
 }
 
+function restoreFromLocalStorage() {
+	console.log('Restoring from localStorage');
+	// pull items from localStorage
+	const lsItems = JSON.parse(localStorage.getItem('items'));
+	console.log(lsItems);
+	if(lsItems.length) {
+		lsItems.forEach(item => items.push(item))
+		list.dispatchEvent(new CustomEvent('itemsUpdated'));
+	}
+}
+
 shoppingForm.addEventListener('submit', handleSubmit);
 list.addEventListener('itemsUpdated', displayItems);
 list.addEventListener('itemsUpdated', mirrorToLocalStorage);
+
+// grab data from browser's localStorage and populate shopping list on the page
+restoreFromLocalStorage();
+
+
